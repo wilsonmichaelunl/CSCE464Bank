@@ -67,4 +67,56 @@ public class DBInterface {
 		return conn;
 	}
 	
+	public Bank getCreditCardByUserId(int userId) {
+		Bank bank = new Bank();
+		DBInterface dbInterface = new DBInterface();
+		dbInterface.OpenConnection();
+		conn = dbInterface.getConnection();
+		String query = "SELECT * FROM creditcards WHERE userId = ?";
+		
+		try {
+			ps = conn.prepareStatement(query);
+			ps.setInt(1, userId);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()){
+				  //Retrieve by column name
+			    bank.setCreditCardId(rs.getInt("Id"));
+			    bank.setCardHolderFirstName(rs.getString("CardHolderFirstName"));
+			    bank.setCardHolderLastName(rs.getString("CardHolderLastName"));
+			    bank.setCreditCardNumber(rs.getString("CreditCardNumber"));
+			    bank.setBalance(rs.getBigDecimal("Balance"));
+			    bank.setCardType(rs.getString("CardType"));
+			    bank.setCvv(rs.getString("CVV"));
+			    bank.setExpirationDate(rs.getString("ExpirationDate"));
+			}
+			
+			dbInterface.CloseQueryConnection(ps, rs);
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return bank;
+	}
+	
+	public void updateCreditCardBalance(int id, BigDecimal newBalance) {
+		DBInterface dbInterface = new DBInterface();
+		dbInterface.OpenConnection();
+		conn = dbInterface.getConnection();
+		String query = "UPDATE creditcards SET Balance = ? WHERE Id = ?";
+		
+		try {
+			ps = conn.prepareStatement(query);
+			ps.setBigDecimal(1, newBalance);
+			ps.setInt(2, id);
+			ps.executeUpdate();
+			ResultSet rs = null;
+			
+			dbInterface.CloseQueryConnection(ps, rs);
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
