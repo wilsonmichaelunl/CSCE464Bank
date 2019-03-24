@@ -85,8 +85,24 @@ public class Bank {
 		this.expirationDate = expirationDate;
 	}
 
-	public static int validateUser(Bank bank) {
+	public int validateBalance(Bank creditCard, BigDecimal totalCost) {
+		if(!(creditCard.getBalance().compareTo(totalCost) < 0) ) {
+			return 1;
+		}else {
+			return 0;
+		}
+	}
 	
-		return 1;
+	public int validateDetails(Bank creditCard, String lastName, String firstName, String cardType, String cardNumber, String cvv, String expirationDate) {
+		if(creditCard.getCardHolderFirstName().equalsIgnoreCase(firstName) &&
+		   creditCard.getCardHolderLastName().equalsIgnoreCase(lastName) &&
+		   creditCard.getCardType().equalsIgnoreCase(cardType) &&
+		   creditCard.getCreditCardNumber().equalsIgnoreCase(cardNumber) &&
+		   creditCard.getCvv().equalsIgnoreCase(cvv) &&
+		   creditCard.getExpirationDate().equalsIgnoreCase(expirationDate)) {
+			return 1;
+		}else {
+			return 0;
+		}
 	}
 }
